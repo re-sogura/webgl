@@ -1,5 +1,5 @@
-import * as THREE from '../lib/three.module.js';
-import { OrbitControls } from '../lib/OrbitControls.js';
+import * as THREE from './lib/three.module.js';
+import { OrbitControls } from './lib/OrbitControls.js';
 
 window.addEventListener('DOMContentLoaded', async () => {
   const wrapper = document.querySelector('#webgl');
@@ -145,7 +145,6 @@ class ThreeApp {
     this.scene.add(this.earthWrap);
 
     this.earthMaterial = new THREE.MeshPhongMaterial({ color: 0x0077ff, wireframe: true });
-    this.earthMaterial.map = this.earthTexture;
     this.earth = new THREE.Mesh(this.sphereGeometry, this.earthMaterial);
     this.earthWrap.add(this.earth);
 
