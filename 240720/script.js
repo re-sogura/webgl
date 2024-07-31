@@ -13,11 +13,11 @@
 // してみると、意味がわかりやすいかもしれません。
 // ============================================================================
 
-import { WebGLUtility } from '../lib/webgl.js';
-import { Vec3, Mat4 } from '../lib/math.js';
-import { WebGLGeometry } from '../lib/geometry.js';
-import { WebGLOrbitCamera } from '../lib/camera.js';
-import { Pane } from '../lib/tweakpane-4.0.3.min.js';
+import { WebGLUtility } from './lib/webgl.js';
+import { Vec3, Mat4 } from './lib/math.js';
+import { WebGLGeometry } from './lib/geometry.js';
+import { WebGLOrbitCamera } from './lib/camera.js';
+import { Pane } from './lib/tweakpane-4.0.3.min.js';
 
 window.addEventListener('DOMContentLoaded', async () => {
   const app = new App();

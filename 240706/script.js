@@ -14,7 +14,7 @@
 // ============================================================================
 
 // モジュールを読み込み
-import { WebGLUtility } from '../lib/webgl.js';
+import { WebGLUtility } from './lib/webgl.js';
 
 // ドキュメントの読み込みが完了したら実行されるようイベントを設定する
 window.addEventListener('DOMContentLoaded', async () => {
