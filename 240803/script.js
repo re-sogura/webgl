@@ -9,10 +9,10 @@
 // 囲ではそれほど多くありません。まずは定番の設定内容から覚えていきましょう。
 // ============================================================================
 
-import { WebGLUtility } from '../lib/webgl.js';
-import { Vec3, Mat4 } from '../lib/math.js';
-import { WebGLGeometry } from '../lib/geometry.js';
-import { WebGLOrbitCamera } from '../lib/camera.js';
+import { WebGLUtility } from './lib/webgl.js';
+import { Vec3, Mat4 } from './lib/math.js';
+import { WebGLGeometry } from './lib/geometry.js';
+import { WebGLOrbitCamera } from './lib/camera.js';
 
 window.addEventListener('DOMContentLoaded', async () => {
   const app = new App();
