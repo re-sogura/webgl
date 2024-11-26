@@ -283,7 +283,7 @@ class ThreeApp {
 
 				if( entry.isIntersecting ) {
 					// テキストを変える
-					this.loopText = ['Curry', 'Pasta', 'Plane', 'Burder', 'Room'][index] || ''; 
+					this.loopText = ['Curry', 'Pasta', 'Plane', 'Burger', 'Room'][index] || ''; 
 					this.spans.forEach((span) => {
 						span.textContent = this.loopText;
 					});
