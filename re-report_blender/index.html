@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./lib/three.module.js"
+        }
+      }
+    </script>
+    <script src="./script.js" type="module"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+      * {margin: 0; padding: 0;}
+      html, body {
+        font-family: "Noto Sans JP", sans-serif;
+        font-weight: 500;
+        user-select: none;
+      }
+      .ttl {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        padding-left: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+        font-weight: 700;
+        pointer-events: none;
+        z-index: 3;
+      }
+      .ttl .en {
+        font-size: 80px;
+        line-height: 1;
+      }
+      .ttl .en small {
+        font-size: 0.7em;
+      }
+      .ttl .ja {
+        line-height: 1.5;
+        font-size: 28px;
+        letter-spacing: 0.02em;
+      }
+      #webgl {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+      }
+      .main {
+        position: relative;
+        z-index: 2;
+      }
+      .container {
+        scroll-snap-type: y mandatory;
+        overflow: auto;
+        height: 100vh;
+      }
+      .section {
+        scroll-snap-align: start;
+        height: 200vh;
+      }
+      #bg {
+        position: fixed;
+        inset: 0;
+        background-color: #eee;
+        z-index: 0;
+      }
+      #bg::before {
+        content: "";
+        display: block;
+        position: absolute;
+        inset: 0;
+        background-color: var(--bgColor, #ffe4ac);
+        z-index: -1;
+        transition: background-color 0.6s ease 0s;
+      }
+      .loop-wrap {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+      .loop-text {
+        display: flex;
+        align-items: center;
+        clip-path: inset(0 0 0 0);
+        animation: loopTxt 30s linear 0s infinite;
+      }
+      .loop-text span {
+        display: inline-block;
+        padding-right: 60px;
+        font-size: 190px;
+        font-weight: 700;
+        margin-top: calc((1em - 1lh) / 2);
+        color: #ffffff;
+      }
+      @keyframes loopTxt {
+        0% {
+          translate: 0 0;
+        }
+        100% {
+          translate: -50% 0;
+        }
+      }
+      .modal-wrap {
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease-in-out 0s;
+      }
+      .is-active .modal-wrap {
+        opacity: 1;
+        visibility: visible;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-wrap::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        display: block;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 0;
+      }
+      .modal-wrap .modal {
+        width: min(80%, 720px);
+        height: min(80%, 400px);
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-sizing: border-box;
+        line-height: 2;
+        z-index: 1;
+        overflow: auto;
+      }
+      .modal .detail {
+        display: none;
+      }
+      .detail.is-view {
+        display: block;
+      }
+      .modal-btn {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        width: 90px;
+        height: 90px;
+        background-color: #000;
+        border-radius: 50%;
+        z-index: 6;
+        transition: scale 0.4s ease 0s;
+      }
+      .modal-btn:hover {
+        cursor: pointer;
+        scale: 1.05;
+      }
+      .modal-btn p {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+      }
+      .is-active .modal-btn p {
+        opacity: 0;
+      }
+      .modal-btn > img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+        opacity: 0;
+      }
+      .is-active .modal-btn > img {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <hgroup class="ttl">
+      <p class="en">Blender</p>
+      <h1 class="ja">ブレンダーで遊ぶ</h1>
+    </hgroup>
+    <div class="modal-btn">
+      <p><img src="./imgs/detail-icon.svg" width="28" height="" alt="">ヒトコト</p>
+      <img src="./imgs/close-icon.svg" width="20" height="20" alt="">
+    </div>
+    <div class="modal-wrap">
+      <div class="modal">
+        <div class="detail">
+          <p>three.jsでマッピングしたパッケージ。<br>UVマッピングっていうのをしないといい感じに貼れない。</p>
+          <p>パッケージは適当にfigmaで作った。2の冪乗のサイズの画像が好ましい。<br>各面の6枚分画像を作るのではなく、1枚の画像の展開図を作成すればいい。</p>
+          <p>※UVマッピングとは、画像の使用したい部分を自分で%で指定する方法。長方形くらいの簡単な形状ならBlenderよりもthree.jsで指定する方が楽。<br>一面ごとに好きに変えられるので、時間で真ん中の画像を変えるなどのことができるらしい。マイクラの炉？の炎がメラメラする感じも3枚の火の形が違う画像を用意して、一定時間で3枚が切り替わる感じにしたら作れるみたい。</p>
+        </div>
+        <div class="detail">
+          <p>BlenderでUVマッピングした。3DではUVマッピングって名前が共通みたい。</p>
+          <p>円柱を作る時間は5分くらい。展開図を適用するのに2時間、、、（調べるのに時間がかかった）<br>自分でどういう展開図にするか想像しながら作るのが一般的。<br>シームっていうので好きな位置でオブジェクトに切れ込みを入れる。→切り込んだ位置で展開図が作られる。</p>
+          <p>展開図を作成したら、Blenderで画像の設定もできるが、展開図をpngでダウンロードしてイラレやフォトショでデザインを作るのが一番ずれなくていい。楽しい。</p>
+        </div>
+        <div class="detail">
+          <p>WebGLスクールの第2回目の課題で作った首振り扇風機の一部。ネットで見た扇風機が可愛かったので、形を参考にしつつ自分でモデリングした。課題の中で一番気に入ってる。アヒルが可愛く作れた。</p>
+          <p><a href="https://re-sogura.github.io/webgl/240525/" target="_blank">完成系はこちら</a></p>
+        </div>
+        <div class="detail">
+          <p>ハンバーガー。時間があったからYoutube見ながら作ってみた。<br>初「物理演算」使用。</p>
+          <p>チーズに物理演算かかってる。クロスのエフェクト?かけて、パテに沿うような感じでトロッと感を出すんだって。すごい。チーズのツヤっと感は、マテリアルの色の荒さを荒くするとツヤっとする。</p>
+          <p>ファイルサイズが最初16MBもあるとんでもないファイルになちゃったけど、削減方法をネットで見つけて594KBまで減らせた。見た目に問題なし。<br>頂点の数はなるべく減らすのが吉。</p>
+        </div>
+        <div class="detail">
+          <p>部屋風。同じくYoutube見ながら作ってみた。</p>
+          <p>Blenderはショートカットがきつい。ショートカットで頭焼き切れそう。</p>
+          <p>特に書くことはない。作ってみたかったからやってみた。<br>時間があったらもっと細かく作って、アニメーション組み込んでも楽しかったかも。</p>
+          <p>一個一個バラバラでthree.js上で呼び出したら、スクロールに合わせて床→壁→家具達が出現する、みたいなアニメーションができるのかも？今度やってみる</p>
+        </div>
+      </div>
+    </div>
+    <div id="webgl"></div>
+    <main class="main">
+      <div class="container">
+        <div class="section"></div>
+        <div class="section"></div>
+        <div class="section"></div>
+        <div class="section"></div>
+        <div class="section"></div>
+        </div>
+      </div>
+    </main>
+    <div id="bg">
+      <div class="loop-wrap">
+        <p class="loop-text"></p>
+      </div>
+    </div>
+  </body>
+</html>
+
