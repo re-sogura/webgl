@@ -289,7 +289,6 @@ class ThreeApp {
 					});
 
 					// 背景を変える
-					const bg = document.getElementById('bg');
 					const bgColors = [
 						'#ffe4ac',
 						'#d5deeb',
@@ -298,7 +297,7 @@ class ThreeApp {
 						'#bdeed9',
 					];
 
-					bg.style.setProperty('--bgColor', bgColors[index]);
+					document.body.style.setProperty('--bgColor', bgColors[index]);
 
 					// モーダルの切り替え
 					const modalDetails = document.querySelectorAll('.modal-wrap .detail');
